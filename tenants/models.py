@@ -1,7 +1,5 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
+from .utils import get_current_tenant
 
 class Organization(models.Model):
     """
@@ -15,12 +13,23 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+
+
+class TenantManager(models.Manager):
+    """
+    This Manager ensures that any query (e.g. Invoice.objects.all())
+    ONLY returns data belonging to the current tenant in the middleware.
+    """
+    def get_queryset(self):
+        tenant = get_current_tenant()
+        return super().get_queryset().filter(tenant=tenant)
 class TenantAwareModel(models.Model):
-    """
-    ABSTRACT MODEL: Every B2B model in our system (Invoices, Tasks, etc.) 
-    will inherit from this to ensure it is tied to an Organization.
-    """
     tenant = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    
+    # The 'objects' manager is now tenant-aware!
+    objects = TenantManager()
+    # We keep a 'plain' manager just in case we need to see everything (e.g. for Admin)
+    all_objects = models.Manager() 
 
     class Meta:
         abstract = True
