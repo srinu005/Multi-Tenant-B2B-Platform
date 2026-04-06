@@ -32,6 +32,20 @@ services:
     depends_on:
       - db
       - redis
-
+  worker:
+    build: .
+    container_name: b2b_worker
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DB_HOST=db
+      - DB_NAME=b2b_platform
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres_pass
+      - REDIS_URL=redis://redis:6379/0
 volumes:
   postgres_data:
