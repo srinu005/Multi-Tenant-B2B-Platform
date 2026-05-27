@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | B2B Platform{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-20">
+    <div class="bg-white p-10 rounded-3xl shadow-lg border border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Sign in to your account</h1>
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            <div>
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                <div class="mt-2">
+                    {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.username.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="mt-2">
+                    {{ form.password }}
+                </div>
+                {% if form.password.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.password.errors }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="w-full inline-flex justify-center rounded-xl bg-indigo-600 px-5 py-3 text-white font-semibold hover:bg-indigo-700">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

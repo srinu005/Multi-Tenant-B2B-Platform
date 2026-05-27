@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory | B2B Platform{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800">Inventory</h2>
+    <p class="text-gray-500">All inventory items for {% if tenant %}{{ tenant.name }}{% else %}your tenant{% endif %}.</p>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+    <p class="text-sm text-gray-600">This page is a placeholder for inventory management. The sidebar and dashboard links are now connected to the correct routes.</p>
+</div>
+{% endblock %}

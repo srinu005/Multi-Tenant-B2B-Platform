@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800">Business Dashboard</h2>
+    <p class="text-gray-500">Overview for tenant: <span class="font-bold text-indigo-600">{% if tenant %}{{ tenant.name }}{% else %}Independent Tenant{% endif %}</span></p>
+</div>
+
+<!-- KPI Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <p class="text-sm font-medium text-gray-500 uppercase">Monthly Sales</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">$24,500</p>
+        <p class="text-xs text-green-500 mt-2"><i class="fas fa-arrow-up"></i> 12% increase</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <p class="text-sm font-medium text-gray-500 uppercase">Active Orders</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">45</p>
+        <p class="text-xs text-blue-500 mt-2">8 pending shipment</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <p class="text-sm font-medium text-gray-500 uppercase">Inventory Value</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">$102,000</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <p class="text-sm font-medium text-gray-500 uppercase">Top Client</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">Acme Corp</p>
+    </div>
+</div>
+
+<!-- Recent Transactions Table -->
+<div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+    <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="font-bold text-gray-700">Recent B2B Transactions</h3>
+        <button class="text-indigo-600 text-sm font-bold">View All</button>
+    </div>
+    <table class="w-full text-left">
+        <thead class="bg-gray-50 text-xs text-gray-400 uppercase font-bold">
+            <tr>
+                <th class="px-6 py-4">Order ID</th>
+                <th class="px-6 py-4">Client Name</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4 text-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-sm">
+            <tr>
+                <td class="px-6 py-4 font-mono text-indigo-600">#ORD-7721</td>
+                <td class="px-6 py-4 font-medium">Global Logistics Ltd</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Shipped</span></td>
+                <td class="px-6 py-4 text-right font-bold">$1,450.00</td>
+            </tr>
+            <tr>
+                <td class="px-6 py-4 font-mono text-indigo-600">#ORD-7722</td>
+                <td class="px-6 py-4 font-medium">TechNova Solutions</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Pending</span></td>
+                <td class="px-6 py-4 text-right font-bold">$890.00</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
