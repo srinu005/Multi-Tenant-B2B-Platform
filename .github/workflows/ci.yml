@@ -1,0 +1,85 @@
+name: Multi-Tenant B2B Platform CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: b2b_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migrations
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: b2b_test
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DJANGO_SETTINGS_MODULE: core.settings
+          SECRET_KEY: fake-secret-key-for-testing
+          DEBUG: "True"
+          REDIS_URL: redis://localhost:6379/0
+          CELERY_BROKER_URL: redis://localhost:6379/0
+          CELERY_TASK_ALWAYS_EAGER: "True"
+          CELERY_TASK_EAGER_PROPAGATES: "True"
+        run: python manage.py migrate
+
+      - name: Run tests with coverage
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: b2b_test
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DJANGO_SETTINGS_MODULE: core.settings
+          SECRET_KEY: fake-secret-key-for-testing
+          DEBUG: "True"
+          REDIS_URL: redis://localhost:6379/0
+          CELERY_BROKER_URL: redis://localhost:6379/0
+          CELERY_TASK_ALWAYS_EAGER: "True"
+          CELERY_TASK_EAGER_PROPAGATES: "True"
+        run: pytest -v --tb=short --cov=. --cov-report=term-missing
+
+      - name: Build Docker image
+        run: docker build -t b2b-platform:ci .
