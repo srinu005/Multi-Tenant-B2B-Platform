@@ -1,6 +1,8 @@
 import pytest
 from rest_framework.test import APIClient
 from tenants.models import Organization
+import django
+
 
 
 @pytest.fixture
@@ -26,3 +28,9 @@ def tenant_google(db):
         slug="google", defaults={"name": "Google LLC"}
     )
     return obj
+
+
+@pytest.fixture(autouse=True)
+def set_celery_eager(settings):
+    settings.CELERY_TASK_ALWAYS_EAGER = True
+    settings.CELERY_TASK_EAGER_PROPAGATES = True

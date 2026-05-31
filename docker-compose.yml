@@ -3,6 +3,8 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
+    ports:
+      - "5432:5432"
     container_name: b2b_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
