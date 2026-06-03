@@ -37,6 +37,7 @@ This project demonstrates my ability to build backend systems that combine secur
 
 ## Run locally
 ```bash
+docker compose up
 docker compose up -d db redis
 docker compose run --rm web pytest
 ```
